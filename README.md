@@ -6,11 +6,15 @@
 
 ## Thoughts on the code
 
-Code quality was very poor, readability of the code was also very bad, who ever wrote this code tried to abstract same working and tried
-to follow fat model slim controller methodology but did not deliver,
-Abstraction (concept) is necessary but abstraction without thought and clear pattern ofter lead to poor code readability.
+- **Poor Code Quality and Readability**: The code lacked clarity, making it difficult to understand and maintain. Comments, proper formatting, and consistent coding standards were missing, contributing to its poor quality.
 
-There were tons of instances where we were querying data from DB inside loops
+- **Failed Attempt at Abstraction and Fat Model Slim Controller Methodology**: While the code aimed to abstract similar functionalities and adhere to the fat model slim controller methodology, it didn't effectively implement these concepts. For instance, business logic was intertwined with presentation logic, violating the separation of concerns principle.
+
+- **Need for Clear Abstraction Patterns**: Although abstraction is essential for code maintainability and scalability, it must be accompanied by clear design patterns. Without well-defined patterns, the code becomes convoluted and challenging to comprehend, leading to decreased readability.
+
+- **Database Queries Inside Loops**: The code exhibited a common anti-pattern of querying the database within loops. For example, fetching data from the database in a loop iterating over a collection of items. This practice results in poor performance and scalability issues, especially with large datasets.
+
+- **Time Complexity Concerns**: Considering scenarios like 100 users and 5 loops querying the database, the code's time complexity could become a bottleneck. The O(n \* m) complexity (where n is the number of users and m is the number of loops) could lead to significant performance degradation, impacting the application's responsiveness.
 
 Assuming you have:
 
@@ -31,13 +35,33 @@ Assuming you have:
 | 1000  | 1     | O(1000)         |
 | 1000  | 5     | O(5000)         |
 
-Also variable names wasn't following single pattern. some variable was in snake case other where in camel.
+- **Inconsistent Variable Naming Conventions**: Inconsistencies in variable naming conventions, such as mixing snake case with camel case, further hindered code readability and maintainability. Clear and consistent naming conventions are essential for understanding code quickly.
 
-Code was using Repository pattern but only for namesake. moving bad code from controller to repo does not make it better
+- **Misuse of Repository Pattern**: Although the code claimed to utilize the Repository pattern, it did not leverage its benefits effectively. Merely moving code from the controller to the repository without proper architectural considerations does not enhance code quality or maintainability.
 
-I have my own patter which i use called office pattern and here's how it works
+- **Avoid Nested IF Statements**: The code contained nested IF statements, which can lead to complex control flows and make the code harder to understand and maintain. Refactoring to use techniques like guard clauses, switch statements, or polymorphism can improve readability and maintainability.
 
-### Architecture Overview
+# Antipatterns to Avoid in Code
+
+## 1. Spaghetti Code
+
+Spaghetti code is like a messy plate of noodles - poorly organized and tough to untangle. It lacks structure, making it hard to follow. To steer clear of spaghetti code, aim for clear organization, break tasks into smaller pieces, and stick to coding guidelines.
+
+## 2. God Object
+
+The god object is like a superhero with too many powers - it handles everything, but it's overwhelming. This leads to tangled, hard-to-test code. Instead, focus on the single responsibility principle. Divide tasks into smaller, manageable chunks.
+
+## 3. Magic Strings and Numbers
+
+Magic strings and numbers are like hidden secrets in your code - they're hard to understand and prone to errors. Use constants or enums instead. Give them meaningful names so others can easily understand their purpose.
+
+## 5. Nested If Statements
+
+Nested if statements are like a tangled web - they're confusing and easy to get lost in. When you have multiple levels of if statements, the code becomes hard to read and maintain. Instead of nesting ifs deeply, consider refactoring your code to use techniques like guard clauses, switch statements, or polymorphism. This makes your code more readable and easier to understand.
+
+Also i would suggest this article form [medium](https://medium.com/@iamprovidence/is-repository-an-anti-pattern-6aba7422fa48).
+
+### My own Architecture Overview
 
 1. **Controller**: Receives requests and delegates them to managers.
 2. **Manager**: Decides which pipeline should handle the request and interacts with the Sculpture service to refine and provide necessary data to workers.
